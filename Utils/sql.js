@@ -1,12 +1,13 @@
 import pg from "pg"
+import "dotenv/config";
 
 
 const config = {
-    user: "avnadmin",
-    password: "AVNS__acU-cdaXyDBFGcakh3",
-    host: "pg-19701323-tec-fc5f.g.aivencloud.com",
-    port: 14422,
-    database: "defaultdb",
+  user: "avnadmin",
+  password: process.env.PASSWORD,
+  host: "pg-19701323-tec-fc5f.g.aivencloud.com",
+  port: 14422,
+  database: "defaultdb",
     ssl: {
         rejectUnauthorized: true,
         ca: `-----BEGIN CERTIFICATE-----
