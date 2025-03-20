@@ -3,11 +3,11 @@ import "dotenv/config";
 
 
 const config = {
-  user: "avnadmin",
+  user: process.env.BD_USER,
   password: process.env.PASSWORD,
-  host: "pg-19701323-tec-fc5f.g.aivencloud.com",
-  port: 14422,
-  database: "defaultdb",
+  host: process.env.HOST,
+  port: process.env.PORT,
+  database: process.env.DATABASE,
     ssl: {
         rejectUnauthorized: true,
         ca: `-----BEGIN CERTIFICATE-----

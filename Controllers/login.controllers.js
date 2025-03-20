@@ -1,16 +1,24 @@
 import { connectBD } from "../Utils/sql.js";
 
-export const login = async(req,res) => {
+export const login = async(req, res) => {
     const sql = connectBD();
     const query = {
-    text: "select * from users where username=$1",
-    values: [req.body.username],
+        text:"SELECT * FROM users WHERE username = $1 ", 
+        values: [req.body.username],
     };
     const data = await sql.query(query);
-    if(req.body.password === data.rows.password){
-        res.json({isLogin: true, user: data.rows});
+    if(data.rows.length === 0){
+        res.json({islogin: false, user:{}});
         return;
-    } else{
-    res.json({isLogin: false, user: {}});
+    }
+    
+    if(String(req.body.password.trim()) === String(data.rows[0].password.trim()))
+        {
+        res.json({islogin: true, user:data.rows[0]});;
+        return;
+    } 
+    else
+    {
+        res.json({islogin: false, user: {}});
     }
 };

@@ -1,56 +1,54 @@
-import {query} from "express";
 import { connectBD } from "../Utils/sql.js";
 
-export const getUsers = async(req,res) => {
+export const getUsers = async (req, res) => {
     const sql = connectBD();
     const data = await sql.query("select * from users");
-    console.log(data.rows);
     res.json(data.rows);
-};
-
-export const getUser = async(req, res) => {
+  };
+  
+  export const getUser = async (req, res) => {
     const sql = connectBD();
     const query = {
-        text:"SELECT * FROM users WHERE user_id = $1", 
-        values: [req.params.user_id],
+      text: "select * from users where user_id = $1",
+      values: [req.params.user_id],
     };
     const data = await sql.query(query);
-    console.log(data.rows);
     res.json(data.rows);
-};
-
-export const postUser = async(req, res) => {
-    const[name, username,password] = req.body;
-    const sql = connectDB();
+  };
+  
+  export const postUser = async (req, res) => {
+    const {username, first_name, last_name, birthdate, password, email } = req.body;
+    const sql = connectBD();
     const query = {
-        text:"INSERT into users(name,username,password); values($1,$2,$3)", 
-        values: [req.params.user_id],
+      text: "insert into users(username, first_name, last_name, birthdate, password, email) values($1, $2, $3, $4, $5, $6)",
+      values: [username, first_name, last_name, birthdate, password, email],
     };
     const data = await sql.query(query);
-    console.log(data.rows);
     res.json(data.rows);
-};
-
-export const putUser = async(req, res) => {
-    const[name, username,password] = req.body;
-    const sql = connectDB();
+  };
+  
+  export const putUser = async (req, res) => {
+    const {username, first_name, last_name, birthdate, password, email} = req.body;
+    const sql = connectBD();
     const query = {
-        text:"UPDATE set name = $1, username = $2, password$3, where user_id = $4", 
-        values: [req.params.user_id],
+      text: "update users set username = $1, first_name = $2, last_name = $3, birthdate = $4, password = $5, email, $6 where user_id = $7",
+      values: [username, first_name, last_name, birthdate, password, email, req.params.user_id],
     };
     const data = await sql.query(query);
-    console.log(data.rows);
     res.json(data.rows);
-};
-
-export const deleteUser = async(req, res) => {
-    const[name, username,password] = req.body;
-    const sql = connectDB();
-    const query = {
-        text:"UPDATE set name = $1, username = $2, password$3, where user_id = $4", 
+  };
+  
+  export const deleteUser = async (req, res) => {
+    try {
+      const sql = connectBD();
+      const query = {
+        text: "delete from users where user_id = $1",
         values: [req.params.user_id],
-    };
-    const data = await sql.query(query);
-    console.log(data.rows);
-    res.json(data.rows);
-};
+      };
+      await sql.query(query);
+      res.status(200).json({ msg: "ya se borro" });
+    } catch (error) {
+      res.status(500).json({ msg: error.msg });
+    }
+  };
+  
